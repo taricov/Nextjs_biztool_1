@@ -4,11 +4,14 @@ import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
       <ClerkProvider {...pageProps} >
-      <Component {...pageProps} />
+      <ChakraProvider>
+        <Component {...pageProps} />
+      </ChakraProvider>
       </ClerkProvider>
     )
 };
