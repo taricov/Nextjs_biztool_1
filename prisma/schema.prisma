@@ -11,8 +11,60 @@ generator client {
     provider = "prisma-client-js"
 }
 
-model Example {
-    id        String   @id @default(cuid())
+model User {
+    id           Int     @id @default(autoincrement())
+    email        String  @unique
+    name         String?
+    company_name String?
+    country      String?
+    city         String?
+    title        String
+
+    role         Role           @default(USER)
+    appointments Appointments[]
+    prefenrnces  Prefenrnces?
+    Permissions  Permissions?
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+model Prefenrnces {
+    id        Int     @id @default(autoincrement())
+    dark_mode Boolean
+
+    user   User @relation(fields: [userId], references: [id])
+    userId Int  @unique
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Permissions {
+    id              Int     @id @default(autoincrement())
+    add_appointment Boolean
+
+    userId Int  @unique
+    user   User @relation(fields: [userId], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Appointments {
+    id         Int      @id @default(autoincrement())
+    title      String
+    start_time DateTime @db.Timestamp
+    end_time   DateTime @db.Timestamp
+
+    user   User @relation(fields: [userId], references: [id])
+    userId Int  @unique
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+enum Role {
+    USER
+    ADMIN
 }
